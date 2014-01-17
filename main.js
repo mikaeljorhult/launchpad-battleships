@@ -5,7 +5,9 @@ requirejs.config( {
 require( [ 'midi-events' ], function( midi ) {
 	var grid = createGrid(),
 		ships = [],
+		shipsFound = [],
 		explored = [],
+		isPlaying = false,
 		outputPort = 4;
 	
 	// Connect and run init function when connected.
@@ -18,8 +20,11 @@ require( [ 'midi-events' ], function( midi ) {
 		
 		// Listen for pressed buttons.
 		midi.on( 'noteon', function( message ) {
+			// Bail if no active game.
+			if ( !isPlaying ) { return; }
+			
 			// Check, and bail, if button has already been pressed.
-			if ( explored.indexOf( message.note ) === -1 ) {
+			if ( explored.indexOf( message.note ) === -1 && shipsFound.length < ships.length ) {
 				midi.send( outputPort, {
 					type: 'noteon',
 					note: message.note,
@@ -30,6 +35,9 @@ require( [ 'midi-events' ], function( midi ) {
 		
 		// Listen for released buttons.
 		midi.on( 'noteoff', function( message ) {
+			// Bail if no active game.
+			if ( !isPlaying ) { return; }
+			
 			// Check, and bail, if button has already been pressed.
 			if ( explored.indexOf( message.note ) === -1 ) {
 				var sendMessage = {
@@ -41,6 +49,14 @@ require( [ 'midi-events' ], function( midi ) {
 				// Check if position contains ship.
 				if ( ships.indexOf( message.note ) > -1 ) {
 					sendMessage.value = 60;
+					
+					// Add ship position to array of found ships.
+					shipsFound.push( message.note );
+					
+					// Check if all ships have been found.
+					if ( shipsFound.length === ships.length ) {
+						isPlaying = false;
+					}
 				}
 				
 				// Send response.
@@ -57,8 +73,12 @@ require( [ 'midi-events' ], function( midi ) {
 	
 	// Main functionality.
 	function newGame() {
-		// Empty array of explored positions.
+		// Start new game.
+		isPlaying = true;
+		
+		// Empty array of explored positions and found ships.
 		explored = [];
+		shipsFound = [];
 		
 		// Add ships to grid.
 		ships = randomPositions();
