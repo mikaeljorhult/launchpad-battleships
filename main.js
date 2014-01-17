@@ -8,6 +8,7 @@ require( [ 'midi-events' ], function( midi ) {
 		shipsFound = [],
 		explored = [],
 		isPlaying = false,
+		numberOfPositions = 5,
 		outputPort = 4;
 	
 	// Connect and run init function when connected.
@@ -67,6 +68,28 @@ require( [ 'midi-events' ], function( midi ) {
 			}
 		} );
 		
+		// Raise number of ships in game.
+		midi.on( 'controller:104', function( message ) {
+			// Bail if no active game.
+			if ( !isPlaying ) { return; }
+			
+			// If button is pressed.
+			if ( message.value === 127 && numberOfPositions < 32 ) {
+				numberOfPositions++;
+			}
+		} );
+		
+		// Lower number of ships in game.
+		midi.on( 'controller:105', function( message ) {
+			// Bail if no active game.
+			if ( !isPlaying ) { return; }
+			
+			// If button is pressed.
+			if ( message.value === 127 && numberOfPositions > 4 ) {
+				numberOfPositions--;
+			}
+		} );
+		
 		// Launch new game.
 		newGame();
 	}
@@ -81,7 +104,7 @@ require( [ 'midi-events' ], function( midi ) {
 		shipsFound = [];
 		
 		// Add ships to grid.
-		ships = randomPositions();
+		ships = randomPositions( numberOfPositions );
 		
 		// Make all buttons yellow.
 		allYellow();
