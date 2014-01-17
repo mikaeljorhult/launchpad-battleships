@@ -58,7 +58,6 @@ require( [ 'midi-events', 'jquery' ], function( midi, $ ) {
 				
 				// Up number of shots.
 				shots++;
-				$( '#number-shots' ).html( shots );
 				
 				// Check if position contains ship.
 				if ( ships.indexOf( message.note ) > -1 ) {
@@ -71,9 +70,10 @@ require( [ 'midi-events', 'jquery' ], function( midi, $ ) {
 					if ( shipsFound.length === ships.length ) {
 						isPlaying = false;
 					}
-					
-					$( '#found-ships' ).html( shipsFound.length );
 				}
+				
+				// Update stats on page.
+				updateStats();
 				
 				// Send response.
 				midi.send( outputPort, sendMessage );
@@ -92,7 +92,8 @@ require( [ 'midi-events', 'jquery' ], function( midi, $ ) {
 			if ( message.value === 127 && numberOfPositions < 32 ) {
 				numberOfPositions++;
 				
-				$( '#total-ships' ).html( numberOfPositions );
+				// Update stats on page.
+				updateStats();
 			}
 		} );
 		
@@ -105,7 +106,8 @@ require( [ 'midi-events', 'jquery' ], function( midi, $ ) {
 			if ( message.value === 127 && numberOfPositions > 4 ) {
 				numberOfPositions--;
 				
-				$( '#total-ships' ).html( numberOfPositions );
+				// Update stats on page.
+				updateStats();
 			}
 		} );
 		
@@ -130,6 +132,9 @@ require( [ 'midi-events', 'jquery' ], function( midi, $ ) {
 		explored = [];
 		shipsFound = [];
 		shots = 0;
+		
+		// Update stats on page.
+		updateStats();
 		
 		// Add ships to grid.
 		ships = randomPositions( numberOfPositions );
@@ -191,6 +196,12 @@ require( [ 'midi-events', 'jquery' ], function( midi, $ ) {
 		
 		// Send messages to device.
 		midi.send( outputPort, messages );
+	}
+	
+	function updateStats() {
+		$( '#total-ships' ).html( numberOfPositions );
+		$( '#found-ships' ).html( shipsFound.length );
+		$( '#number-shots' ).html( shots );
 	}
 	
 	function listeners() {
