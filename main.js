@@ -17,6 +17,7 @@ require( [ 'midi-events', 'jquery' ], function( midi, $ ) {
 		explored = [],
 		isPlaying = false,
 		numberOfPositions = 5,
+		shots = 0,
 		outputPort = 4;
 	
 	// Connect and run init function when connected.
@@ -33,7 +34,7 @@ require( [ 'midi-events', 'jquery' ], function( midi, $ ) {
 			if ( !isPlaying ) { return; }
 			
 			// Check, and bail, if button has already been pressed.
-			if ( explored.indexOf( message.note ) === -1 && shipsFound.length < ships.length ) {
+			if ( explored.indexOf( message.note ) === -1 ) {
 				midi.send( outputPort, {
 					type: 'noteon',
 					note: message.note,
@@ -54,6 +55,10 @@ require( [ 'midi-events', 'jquery' ], function( midi, $ ) {
 					note: message.note,
 					value: 0
 				};
+				
+				// Up number of shots.
+				shots++;
+				$( '#number-shots' ).html( shots );
 				
 				// Check if position contains ship.
 				if ( ships.indexOf( message.note ) > -1 ) {
@@ -79,7 +84,7 @@ require( [ 'midi-events', 'jquery' ], function( midi, $ ) {
 		// Raise number of ships in game.
 		midi.on( 'controller:104', function( message ) {
 			// Bail if no active game.
-			if ( !isPlaying ) { return; }
+			if ( isPlaying && shots > 0 ) { return; }
 			
 			// If button is pressed.
 			if ( message.value === 127 && numberOfPositions < 32 ) {
@@ -92,7 +97,7 @@ require( [ 'midi-events', 'jquery' ], function( midi, $ ) {
 		// Lower number of ships in game.
 		midi.on( 'controller:105', function( message ) {
 			// Bail if no active game.
-			if ( !isPlaying ) { return; }
+			if ( isPlaying && shots !== 0 ) { return; }
 			
 			// If button is pressed.
 			if ( message.value === 127 && numberOfPositions > 4 ) {
@@ -102,8 +107,11 @@ require( [ 'midi-events', 'jquery' ], function( midi, $ ) {
 			}
 		} );
 		
-		// Launch new game.
-		newGame();
+		// Turn all buttons off.
+		allButtons( 0 );
+		
+		// Add listeners.
+		listeners();
 	}
 	
 	// Main functionality.
@@ -114,12 +122,13 @@ require( [ 'midi-events', 'jquery' ], function( midi, $ ) {
 		// Empty array of explored positions and found ships.
 		explored = [];
 		shipsFound = [];
+		shots = 0;
 		
 		// Add ships to grid.
 		ships = randomPositions( numberOfPositions );
 		
 		// Make all buttons yellow.
-		allYellow();
+		allButtons( 29 );
 	}
 	
 	// Funtion to map the grid of the Launchpad.
@@ -159,8 +168,8 @@ require( [ 'midi-events', 'jquery' ], function( midi, $ ) {
 		return positions;
 	}
 	
-	// Light all of the buttons yellow.
-	function allYellow() {
+	// Light all of the buttons.
+	function allButtons( value ) {
 		var messages = [],
 			i;
 		
@@ -169,11 +178,20 @@ require( [ 'midi-events', 'jquery' ], function( midi, $ ) {
 			messages.push( {
 				type: 'noteon',
 				note: grid[ i ],
-				value: 29
+				value: value
 			} );
 		}
 		
 		// Send messages to device.
 		midi.send( outputPort, messages );
+	}
+	
+	function listeners() {
+		$( document ).on( 'click', '#new-game', function( e ) {
+			e.preventDefault();
+			
+			// Launch new game.
+			newGame();
+		} );
 	}
 } );
