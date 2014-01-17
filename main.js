@@ -107,6 +107,11 @@ require( [ 'midi-events', 'jquery' ], function( midi, $ ) {
 			}
 		} );
 		
+		// Launch new game with Mixer button.
+		midi.on( 'controller:111', function( message ) {
+			newGame();
+		} );
+		
 		// Turn all buttons off.
 		allButtons( 0 );
 		
