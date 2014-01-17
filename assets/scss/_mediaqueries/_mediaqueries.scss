@@ -1,0 +1,18 @@
+// TODO: Use index/counter, instead of variable, as soon as supported in Sass 3.3.
+// https://github.com/nex3/sass/issues/996
+
+$i: 0;
+
+@each $prefix, $breakpoint in $grid-breakpoints {
+	@include breakpoint( $breakpoint ) {
+		@include grid-setup( $namespace: $prefix );
+		
+		@if( $i == 0 ) {
+			.mobile-only {
+				display: none;
+			}
+		}
+	}
+	
+	$i: $i + 1;
+}

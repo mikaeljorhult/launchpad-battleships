@@ -1,0 +1,41 @@
+@mixin grid-setup( $namespace ) {
+	@each $percentage in $grid-percentages {
+		.#{ $namespace }-#{ floor( $percentage ) } { width: $percentage * 1%; }
+	}
+	
+	.#{ $namespace }-show { display: block; }
+	.#{ $namespace }-hide { display: none; }
+}
+
+@mixin grid-setup-container() {
+	$half-gutter: $grid-gutter / 2;
+
+	.wrapper {
+		max-width: $grid-width;
+		margin: 0 auto;
+	}
+
+	.grids {
+		overflow: hidden;
+		clear: both;
+		margin-left: -$grid-gutter;
+		
+		> * {
+			width: 100%;
+			float: left;
+			padding-left: $grid-gutter;
+	
+			*:first-child {
+				margin-top: 0;
+			}
+		}
+	}
+
+	.half-gutter {
+		margin-left: -$half-gutter;
+
+		> * {
+			padding-left: $half-gutter;
+		}
+	}
+}

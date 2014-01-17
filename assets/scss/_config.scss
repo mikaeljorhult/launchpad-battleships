@@ -1,0 +1,51 @@
+// Colors
+$html-background-color: #f6f6f6;
+$body-background-color: transparent;
+$font-color: #333;
+
+$brand-color-1: #DED9D1;
+$brand-color-2: #8B867D;
+$brand-color-3: #6C719E;
+
+
+// Typography
+$font-size: 16;
+$line-height: 26;
+$base-font-size: $font-size * 1px;
+$base-line-height: $line-height * 1px;
+$base-rhythm-unit: $base-line-height / $base-font-size * 1em;
+
+$font-size-1: 38;
+$font-size-1-uppercase: $font-size-1 - 1;
+
+$font-size-2: 32;
+$font-size-2-uppercase: $font-size-2 - 1;
+
+$font-size-3: 26;
+$font-size-3-uppercase: $font-size-3 - 1;
+
+$font-size-4: 21;
+$font-size-4-uppercase: $font-size-4 - 1;
+
+$font-size-5: 18;
+$font-size-5-uppercase: $font-size-5 - 1;
+
+$font-size-6: 14;
+$font-size-6-uppercase: $font-size-4 - 1;
+
+
+// Grid configs
+$grid-width: 100%;
+$grid-gutter: 0;
+$grid-breakpoints: (
+	column: 481px,
+	mq1-column: 769px,
+	mq2-column: 1025,
+	mq3-column: 1200px
+);
+$grid-percentages: 100, 90, 80, 75, 70, 66.666, 60, 50, 40, 33.333, 30, 25, 20, 10;
+
+
+// Sprites
+$logo-spacing: 2px;
+//@import "logo/*.png";
