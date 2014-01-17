@@ -1,8 +1,16 @@
 requirejs.config( {
-    baseUrl: 'modules'
+    baseUrl: 'modules',
+	paths: {
+		jquery: 'http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min'
+	},
+	shim: {
+		jquery: {
+			exports: '$'
+		}
+	}
 } );
 
-require( [ 'midi-events' ], function( midi ) {
+require( [ 'midi-events', 'jquery' ], function( midi, $ ) {
 	var grid = createGrid(),
 		ships = [],
 		shipsFound = [],
@@ -76,6 +84,8 @@ require( [ 'midi-events' ], function( midi ) {
 			// If button is pressed.
 			if ( message.value === 127 && numberOfPositions < 32 ) {
 				numberOfPositions++;
+				
+				$( '#number-ships' ).html( numberOfPositions );
 			}
 		} );
 		
@@ -87,6 +97,8 @@ require( [ 'midi-events' ], function( midi ) {
 			// If button is pressed.
 			if ( message.value === 127 && numberOfPositions > 4 ) {
 				numberOfPositions--;
+				
+				$( '#number-ships' ).html( numberOfPositions );
 			}
 		} );
 		
