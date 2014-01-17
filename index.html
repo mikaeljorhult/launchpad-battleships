@@ -11,25 +11,34 @@
 	<meta name="viewport" content="width=device-width">
 	
 	<link rel="stylesheet" href="assets/css/main.css" media="screen, projection, tv, handheld">
-	<link rel="stylesheet" href="assets/css/print.css" media="print">
 </head>
 
 <body>
-	<header class="wrapper main-header">
+	<header class="wrapper main-header" style="background-color: #6A4A3C;">
 		<h1><a href="index.html" class="logo">Launchpad Battleships</a></h1>
 	</header>
 	
 	<section class="wrapper main-content">
-		<div id="number-ships">5</div>
-		<div id="number-shots">0</div>
-		<button id="new-game">New Game</button>
+		<div class="grids">
+			<section class="column-33" style="background-color: #00A0B0;">
+				<button id="new-game">New Game</button>
+			</section>
+			
+			<section class="column-33 score" style="background-color: #EB6841;">
+				<span id="number-shots">0</span>
+			</section>
+			
+			<section class="column-33 score" style="background-color: #EDC951;">
+				<span id="found-ships">0</span> / <span id="total-ships">5</span>
+			</section>
+		</div>
 	</section>
 	
 	<footer class="wrapper main-footer">
 		&nbsp;
 	</footer>
 	
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js" data-main="main"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js" data-main="assets/js/main"></script>
 </body>
 
 </html>

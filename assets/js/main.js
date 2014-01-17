@@ -1,5 +1,5 @@
 requirejs.config( {
-    baseUrl: 'modules',
+    baseUrl: 'assets/js/modules',
 	paths: {
 		jquery: 'http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min'
 	},
@@ -71,6 +71,8 @@ require( [ 'midi-events', 'jquery' ], function( midi, $ ) {
 					if ( shipsFound.length === ships.length ) {
 						isPlaying = false;
 					}
+					
+					$( '#found-ships' ).html( shipsFound.length );
 				}
 				
 				// Send response.
@@ -90,7 +92,7 @@ require( [ 'midi-events', 'jquery' ], function( midi, $ ) {
 			if ( message.value === 127 && numberOfPositions < 32 ) {
 				numberOfPositions++;
 				
-				$( '#number-ships' ).html( numberOfPositions );
+				$( '#total-ships' ).html( numberOfPositions );
 			}
 		} );
 		
@@ -103,7 +105,7 @@ require( [ 'midi-events', 'jquery' ], function( midi, $ ) {
 			if ( message.value === 127 && numberOfPositions > 4 ) {
 				numberOfPositions--;
 				
-				$( '#number-ships' ).html( numberOfPositions );
+				$( '#total-ships' ).html( numberOfPositions );
 			}
 		} );
 		
