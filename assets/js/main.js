@@ -18,15 +18,21 @@ require( [ 'midi-events', 'jquery' ], function( midi, $ ) {
 		isPlaying = false,
 		numberOfPositions = 5,
 		shots = 0,
-		outputPort = 4;
+		outputPort = -1;
 	
-	// Connect and run init function when connected.
-	midi.connect();
-	midi.on( 'connected', init );
+	// Check if Web MIDI API is supported in current browser.
+	if ( midi.supported ) {
+		// Connect and run init function when connected.
+		midi.connect();
+		midi.on( 'connected', init );
+	}
 	
 	// Initialize.
 	function init() {
 		midi.listen();
+		
+		// Identify connected LaunchPad.
+		outputPort = midi.resolveOutputPort( 'name', 'Launchpad' );
 		
 		// Listen for pressed buttons.
 		midi.on( 'noteon', function( message ) {
